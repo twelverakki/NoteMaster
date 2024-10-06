@@ -1,20 +1,18 @@
-def tambahCatatan(self, note):
-        """Fungsi untuk menambah catatan baru ke dalam daftar"""
-        self.NotesMaster.append(note)
-        print(f"Catatan berhasil ditambahkan: {note}")
+from typing import List, Dict  
 
-def view_notes(self):
-        """Fungsi untuk melihat semua catatan yang ada"""
-        if not self.NotesMaster:
-            print("Tidak ada catatan yang tersedia.")
-        else:
-            for i, note in enumerate(self.NoterMaster, 1):
-                print(f"{i}. {note}")
+# Daftar untuk menyimpan catatan  
+catatan_list: List[Dict[str, str]] = []  
 
-def tambahCatatanExisting(self, index, note):
-    """Fungsi untuk menambahkan catatan baru ke catatan yang sudah ada (di akhir)"""
-    if index < 0 or index >= len(self.NotesMaster):
-        print("Index catatan tidak valid.")
-    else:
-        self.NotesMaster[index] += "\n" + note
-        print(f"Catatan berhasil ditambahkan ke catatan nomor {index+1}: {note}")
+def tambah_catatan(judul: str, isi: str) -> None:  
+    """Fungsi untuk menambah catatan baru ke dalam daftar."""  
+    catatan = {"judul": judul, "isi": isi}  
+    catatan_list.append(catatan)  
+    print(f"Catatan berhasil ditambahkan: {judul}")  
+
+def lihat_catatan() -> None:  
+    """Fungsi untuk melihat semua catatan yang ada."""  
+    if not catatan_list:  
+        print("Tidak ada catatan yang tersedia.")  
+    else:  
+        for i, catatan in enumerate(catatan_list, 1):  
+            print(f"{i}. Judul: {catatan['judul']}\n   Isi: {catatan['isi']}\n")
