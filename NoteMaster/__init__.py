@@ -6,7 +6,7 @@ from .module_5 import cari_catatan, pencarian_catatan
 from .module_6 import simpan_catatan_json, simpan_catatan_txt, simpan_catatan_csv, backup_catatan
 
 
-_all_ = [
+__all__ = [
     'tambah_catatan',
     'tambah_catatan_existing',
     'view_notes',

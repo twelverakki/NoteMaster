@@ -65,11 +65,6 @@ def hapus_catatan(file_path, note_id):
 	else:
 		print("Format file tidak didukung")
 
-# Contoh penggunaan
-# hapus_catatan('catatan.json', 1)
-# hapus_catatan('catatan.csv', 2)
-# hapus_catatan('catatan.txt', 3)
-
 def hapus_all(directory_path):
     """
     Menghapus semua file dengan ekstensi .json, .csv, dan .txt dalam direktori yang diberikan.
@@ -109,5 +104,3 @@ def hapus_all(directory_path):
     except Exception as e:
         print(f"Gagal menghapus file dalam direktori {directory_path}: {e}")
 
-# Contoh penggunaan
-# hapus_all('data/')
