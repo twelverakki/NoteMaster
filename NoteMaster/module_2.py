@@ -3,7 +3,7 @@ import json
 import csv
 import os
 
-def delete_note(file_path, note_id):
+def hapus_catatan(file_path, note_id):
 	"""
     Menghapus file teks (.txt) yang disimpan di sistem file.
 
@@ -66,11 +66,11 @@ def delete_note(file_path, note_id):
 		print("Format file tidak didukung")
 
 # Contoh penggunaan
-# delete_note('catatan.json', 1)
-# delete_note('catatan.csv', 2)
-# delete_note('catatan.txt', 3)
+# hapus_catatan('catatan.json', 1)
+# hapus_catatan('catatan.csv', 2)
+# hapus_catatan('catatan.txt', 3)
 
-def delete_all_notes(directory_path):
+def hapus_all(directory_path):
     """
     Menghapus semua file dengan ekstensi .json, .csv, dan .txt dalam direktori yang diberikan.
 
@@ -83,7 +83,7 @@ def delete_all_notes(directory_path):
         Exception: Kesalahan umum lainnya saat mencoba menghapus file.
 
     Example:
-        >>> delete_all_notes('data/')
+        >>> hapus_all('data/')
         File data/catatan1.json berhasil dihapus.
         File data/catatan2.csv berhasil dihapus.
         File data/catatan3.txt berhasil dihapus.
@@ -110,4 +110,4 @@ def delete_all_notes(directory_path):
         print(f"Gagal menghapus file dalam direktori {directory_path}: {e}")
 
 # Contoh penggunaan
-# delete_all_notes('data/')
+# hapus_all('data/')
