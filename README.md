@@ -244,42 +244,51 @@ Format file tidak didukung. Gunakan .csv, .json, atau .txt.
 
 ### `module_4`
 
-#### `tampilkan_catatan(package_name: str, directory: str = ".") -> None`
+#### `tampilkan_catatan(directory: str) -> None`
 Fungsi ini digunakan untuk menampilkan isi catatan dari file yang ada dalam package.
 
 **Parameter:**
-- `package_name`: Nama direktori yang berisi catatan.
-- `directory`: Direktori tempat package berada (default: ".").
+- `directory`: Direktori tempat file berada (example: "Penyimpanan").
 
 **Contoh Penggunaan:**
 ```python
-tampilkan_catatan("CatatanSaya")
+tampilkan_catatan("My_files")
 ```
 
 **Output:**
-Jika package ditemukan, fungsi akan menampilkan daftar file catatan yang tersedia. Pengguna kemudian diminta untuk memasukkan nama file catatan (tanpa ekstensi). Jika file ditemukan, isi file akan ditampilkan. Jika tidak, pesan kesalahan akan dicetak.
+Jika directory ditemukan, fungsi akan menampilkan daftar file catatan yang tersedia. Pengguna kemudian diminta untuk memasukkan nama file catatan (tanpa ekstensi). Jika file ditemukan, isi file akan ditampilkan. Jika tidak, pesan kesalahan akan dicetak.
+
+Jika nama file yang sama ditemukan lebih dari satu dan berbeda ekstensi maka pengguna diminta memasukkan nomor dari catatan yang telah diurutkan, dan masukkan 'semua' untuk menampilkan semua isi dari catatan yang memiliki nama yang sama tersebut.
 
 Contoh output saat file ditemukan:
 ```
 File catatan yang tersedia:
 - catatan.csv
-- catatan.txt
+- note.txt
 - catatan.json
 
 Masukkan nama file catatan (tanpa ekstensi): catatan
+```
+```
+Ada beberapa file dengan nama 'catatan' dengan ekstensi yang berbeda:
+1. catatan.csv
+2. catatan.json
+Pilih file yang ingin ditampilkan (masukkan nomor atau ketik 'semua' untuk menampilkan semua): semua
+```
+```
 Menampilkan isi dari catatan.txt:
 
 [Isi dari catatan.txt]
 ```
 
-Jika package tidak ditemukan, outputnya adalah:
+Jika directory tidak ditemukan, outputnya adalah:
 ```
-Package 'CatatanSaya' tidak ditemukan di direktori .
+Directory 'My_files' tidak ditemukan.
 ```
 
 Jika tidak ada catatan ditemukan untuk nama file yang dimasukkan, outputnya adalah:
 ```
-Tidak ada catatan ditemukan untuk 'catatan' dengan ekstensi yang diizinkan.
+Tidak ada file yang cocok dengan nama '[nama_file]'.
 ```
 
 ### Catatan modul 4
