@@ -90,64 +90,50 @@ Paket NoteMaster terdiri dari modul-modul berikut:
 
 ### `module_1`
 
-
-#### `tambah_catatan(note: str) -> None`
-Fungsi ini digunakan untuk menambah catatan baru ke dalam daftar.
-
-**Parameter:**
-- `note`: String yang berisi catatan yang ingin ditambahkan.
-
-**Contoh Penggunaan:**
-```python
-tambah_catatan("Ini adalah catatan pertama.")
-```
-
-**Output:**
-```
-Catatan berhasil ditambahkan: Ini adalah catatan pertama.
-```
-
-#### `view_notes() -> None`
-Fungsi ini digunakan untuk melihat semua catatan yang ada dalam daftar.
-
-**Contoh Penggunaan:**
-```python
-view_notes()
-```
-
-**Output:**
-```
-1. Ini adalah catatan pertama.
-```
-Jika tidak ada catatan yang tersedia, outputnya adalah:
-```
-Tidak ada catatan yang tersedia.
-```
-
-#### `tambah_catatan_existing(index: int, note: str) -> None`
-Fungsi ini digunakan untuk menambahkan catatan baru ke catatan yang sudah ada (di akhir).
+#### `buat_catatan(judul: str, isi: str, tipe_data: str) -> dict/str`
+Fungsi ini digunakan untuk membuat catatan dengan format yang sesuai berdasarkan tipe data yang dipilih.
 
 **Parameter:**
-- `index`: Indeks catatan yang ingin ditambahkan.
-- `note`: String yang berisi catatan yang ingin ditambahkan ke catatan yang sudah ada.
+- `judul`: String yang berisi judul catatan yang ingin dibuat.
+- `isi`: String yang berisi isi catatan yang ingin dibuat.
+- `tipe_data`: String yang menentukan tipe data untuk menyimpan catatan. Nilai yang valid adalah `'csv'`, `'json'`, atau `'txt'`.
 
 **Contoh Penggunaan:**
 ```python
-tambah_catatan_existing(0, "Ini adalah tambahan untuk catatan pertama.")
+catatan_json = buat_catatan("Catatan Pertama", "Ini adalah isi dari catatan pertama.", "json")
+print(catatan_json)
 ```
 
 **Output:**
-```
-Catatan berhasil ditambahkan ke catatan nomor 1: Ini adalah tambahan untuk catatan pertama.
-```
-Jika indeks tidak valid, outputnya adalah:
-```
-Index catatan tidak valid.
+Jika `tipe_data` adalah `'json'`, outputnya adalah:
+```json
+{
+    "judul": "Catatan Pertama",
+    "isi": "Ini adalah isi dari catatan pertama."
+}
 ```
 
-### Catatan modul 1
-- Pastikan untuk memanggil fungsi `tambah_catatan()` sebelum menggunakan `view_notes()` atau `tambah_catatan_existing()` agar ada catatan yang dapat dilihat atau ditambahkan.
-- Indeks yang digunakan dalam `tambah_catatan_existing()` dimulai dari 0.
+Jika `tipe_data` adalah `'csv'`, outputnya adalah:
+```
+judul,isi
+Catatan Pertama,Ini adalah isi dari catatan pertama.
+```
+
+Jika `tipe_data` adalah `'txt'`, outputnya adalah:
+```
+judul:isi
+Catatan Pertama:Ini adalah isi dari catatan pertama.
+```
+
+Jika `tipe_data` tidak valid, outputnya adalah:
+```
+ValueError: Tipe data tidak valid. Pilih antara 'csv', 'json', atau 'txt'.
+```
+
+### Catatan modul create_catatan
+- Pastikan untuk memilih tipe data yang valid saat memanggil fungsi `buat_catatan()`.
+- Fungsi ini berguna untuk menyimpan catatan dalam berbagai format, sehingga pengguna dapat memilih format yang paling sesuai dengan kebutuhan mereka.
+
 
 ### `module_2`
 
