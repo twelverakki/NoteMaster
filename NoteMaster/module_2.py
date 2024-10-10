@@ -4,7 +4,7 @@ import csv
 import os
 
 def hapus_catatan(file_path, note_id):
-	"""
+    """
     Menghapus file teks (.txt) yang disimpan di sistem file.
 
     Args:
@@ -16,59 +16,61 @@ def hapus_catatan(file_path, note_id):
         Exception: Kesalahan umum lainnya saat mencoba menghapus file.
 
     Example:
-        >>> delete_txt_file('notes/catatan.txt')
+        >>> hapus_catatan('my_notes/catatan.txt', 'catatan')
+        >>> hapus_catatan('my_notes/catatan.json', 1)
+        >>> hapus_catatan('my_notes/catatan.csv', 'note1')
         File notes/catatan.txt berhasil dihapus.
 
     Jika file ditemukan, fungsi ini akan menghapus file dan mencetak pesan berhasil.
     Jika file tidak ditemukan atau terjadi kesalahan lain, pesan kesalahan akan dicetak.
     """
-	# Deteksi ekstensi file
-	file_extension = os.path.splitext(file_path)[1]
+    # Deteksi ekstensi file
+    file_extension = os.path.splitext(file_path)[1]
 
-	# Proses berdasarkan ekstensi file
-	if file_extension == '.json':
-		# Proses file JSON
-		with open(file_path, 'r') as file:
-			data = json.load(file)
+    # Proses berdasarkan ekstensi file
+    if file_extension == '.json':
+        # Proses file JSON
+        with open(file_path, 'r') as file:
+            data = json.load(file)
 
-		# Hapus catatan dengan note_id yang sesuai
-		data = [note for note in data if note.get('id') != note_id]
+        # Hapus catatan dengan note_id yang sesuai
+        data = [note for note in data if note.get('id') != note_id]
 
-		# Simpan perubahan
-		with open(file_path, 'w') as file:
-			json.dump(data, file, indent=4)
+        # Simpan perubahan
+        with open(file_path, 'w') as file:
+            json.dump(data, file, indent=4)
 
-	elif file_extension == '.csv':
-		# Proses file CSV
-		updated_data = []
-		with open(file_path, 'r') as file:
-			reader = csv.DictReader(file)
-			updated_data = [row for row in reader if row['id'] != str(note_id)]
+    elif file_extension == '.csv':
+        # Proses file CSV
+        updated_data = []
+        with open(file_path, 'r', newline='', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            # Cari dan hapus catatan yang sesuai dengan judul
+            updated_data = [row for row in reader if row['judul'] != note_id]
 
-		# Simpan perubahan
-		with open(file_path, 'w', newline='') as file:
-			writer = csv.DictWriter(file, fieldnames=updated_data[0].keys())
-			writer.writeheader()
-			writer.writerows(updated_data)
+        if len(updated_data) < sum(1 for _ in csv.DictReader(open(file_path, 'r', encoding='utf-8'))):
+            # Simpan perubahan jika ada baris yang dihapus
+            with open(file_path, 'w', newline='', encoding='utf-8') as file:
+                writer = csv.DictWriter(file, fieldnames=['id', 'judul', 'isi'])
+                writer.writeheader()
+                writer.writerows(updated_data)
+            print(f"Catatan dengan judul '{note_id}' berhasil dihapus.")
+        else:
+            print(f"Catatan dengan judul '{note_id}' tidak ditemukan.")
 
-	elif file_extension == '.txt':
-		try:
-			os.remove(file_path)  # Menghapus file dari sistem
-			print(f"File {file_path} berhasil dihapus.")
-		except FileNotFoundError:
-			print(f"File {file_path} tidak ditemukan.")
-		except PermissionError:
-			print(f"Tidak memiliki izin untuk menghapus file {file_path}.")
-		except Exception as e:
-			print(f"Gagal menghapus file {file_path}: {e}")
+    elif file_extension == '.txt':
+        try:
+            os.remove(file_path)  # Menghapus file dari sistem
+            print(f"File {file_path} berhasil dihapus.")
+        except FileNotFoundError:
+            print(f"File {file_path} tidak ditemukan.")
+        except PermissionError:
+            print(f"Tidak memiliki izin untuk menghapus file {file_path}.")
+        except Exception as e:
+            print(f"Gagal menghapus file {file_path}: {e}")
 
-	else:
-		print("Format file tidak didukung")
-
-# Contoh penggunaan
-# hapus_catatan('catatan.json', 1)
-# hapus_catatan('catatan.csv', 2)
-# hapus_catatan('catatan.txt', 3)
+    else:
+        print("Format file tidak didukung")
 
 def hapus_all(directory_path):
     """
@@ -109,5 +111,3 @@ def hapus_all(directory_path):
     except Exception as e:
         print(f"Gagal menghapus file dalam direktori {directory_path}: {e}")
 
-# Contoh penggunaan
-# hapus_all('data/')
