@@ -1,98 +1,116 @@
+import os
 import json
 import csv
-import os
 
-def edit_catatan(judul, isi_baru, filename):
+def edit_catatan(judul, isi_baru, file_name, directory=None):
     """
-    Mengedit catatan dalam file yang ditentukan.
-
-    Fungsi ini mencari catatan berdasarkan judul yang diberikan dan
-    memperbarui isinya dengan isi baru. Mendukung format file CSV,
-    JSON, dan TXT. Pengguna harus menentukan nama file yang ingin
-    diedit.
+    Mengedit catatan dalam file CSV, JSON, atau TXT di dalam atau luar direktori yang ditentukan.
 
     Args:
-        judul (str): Judul catatan yang ingin diedit.
+        judul (str): Judul catatan (atau ID untuk JSON) yang ingin diedit.
         isi_baru (str): Isi baru yang akan menggantikan isi catatan.
-        filename (str): Nama file yang berisi catatan.
-        Harus memiliki ekstensi .csv, .json, atau .txt.
-
-    Raises:
-        FileNotFoundError: Jika file tidak ditemukan.
-        ValueError: Jika format file tidak didukung.
+        file_name (str): Nama file yang berisi catatan.
+        directory (str or None): Nama direktori tempat file berada, atau None jika file ada di root.
 
     Returns:
-        None: Fungsi ini tidak mengembalikan nilai,
-        tetapi mencetak pesan status ke konsol.
+        None: Fungsi ini tidak mengembalikan nilai, tetapi mencetak pesan status ke konsol.
     """
-    file_extension = os.path.splitext(filename)[1].lower()
+    # Buat path lengkap jika directory disertakan
+    if directory:
+        file_path = os.path.join(directory, file_name)
+    else:
+        file_path = file_name
 
-    if file_extension == '.csv':
-        try:
-            with open(filename, mode='r', newline='') as file:
+    # Periksa apakah file ada
+    if not os.path.isfile(file_path):
+        print(f"File '{file_path}' tidak ditemukan.")
+        return
+
+    # Deteksi ekstensi file
+    file_extension = os.path.splitext(file_path)[1].lower()
+
+    try:
+        if file_extension == '.csv':
+            # Buka dan edit file CSV
+            with open(file_path, mode='r', newline='', encoding='utf-8') as file:
                 reader = csv.DictReader(file)
                 data = list(reader)
-        except FileNotFoundError:
-            print("Tidak ada catatan yang ditemukan.")
-            return
 
-        found = False
-        for row in data:
-            if row['Judul'] == judul:
-                row['Isi'] = isi_baru
-                found = True
-                break
+                # Cek apakah kolom yang dibutuhkan ada di CSV
+                if 'Judul' not in reader.fieldnames or 'Isi' not in reader.fieldnames:
+                    raise ValueError("File CSV tidak memiliki kolom yang sesuai (Judul, Isi).")
 
-        if not found:
-            print("Catatan dengan judul ini tidak ditemukan.")
-            return
+            # Edit catatan yang sesuai
+            found = False
+            for row in data:
+                if row['Judul'] == judul:
+                    row['Isi'] = isi_baru
+                    found = True
+                    break
 
-        with open(filename, mode='w', newline='') as file:
-            fieldnames = ['Judul', 'Isi']
-            writer = csv.DictWriter(file, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(data)
-        print("Catatan berhasil diedit.")
+            if not found:
+                print(f"Catatan dengan judul '{judul}' tidak ditemukan.")
+                return
 
-    elif file_extension == '.json':
-        try:
-            with open(filename, 'r') as file:
+            # Tulis ulang file CSV dengan perubahan
+            with open(file_path, mode='w', newline='', encoding='utf-8') as file:
+                writer = csv.DictWriter(file, fieldnames=['Judul', 'Isi'])
+                writer.writeheader()
+                writer.writerows(data)
+
+        elif file_extension == '.json':
+            # Buka dan edit file JSON (berdasarkan ID)
+            with open(file_path, 'r', encoding='utf-8') as file:
                 data = json.load(file)
-        except FileNotFoundError:
-            print("Tidak ada catatan yang ditemukan.")
-            return
 
-        if judul not in data:
-            print("Catatan dengan judul ini tidak ditemukan.")
-            return
+            # Cari catatan berdasarkan ID (bukan judul)
+            found = False
+            for item in data:
+                if item['id'] == judul:  # Di JSON, 'judul' adalah ID
+                    item['isi'] = isi_baru
+                    found = True
+                    break
 
-        data[judul] = isi_baru
-        with open(filename, 'w') as file:
-            json.dump(data, file, indent=4)
-        print("Catatan berhasil diedit.")
+            if not found:
+                print(f"Catatan dengan ID '{judul}' tidak ditemukan.")
+                return
 
-    elif file_extension == '.txt':
-        try:
-            with open(filename, 'r') as file:
+            # Tulis ulang file JSON dengan perubahan
+            with open(file_path, 'w', encoding='utf-8') as file:
+                json.dump(data, file, indent=4)
+
+        elif file_extension == '.txt':
+            # Buka dan edit file TXT
+            with open(file_path, 'r', encoding='utf-8') as file:
                 lines = file.readlines()
-        except FileNotFoundError:
-            print("Tidak ada catatan yang ditemukan.")
+
+            # Edit catatan yang sesuai
+            found = False
+            for i, line in enumerate(lines):
+                if line.startswith(judul + ':'):
+                    lines[i] = f"{judul}: {isi_baru}\n"
+                    found = True
+                    break
+
+            if not found:
+                print(f"Catatan dengan judul '{judul}' tidak ditemukan.")
+                return
+
+            # Tulis ulang file TXT
+            with open(file_path, 'w', encoding='utf-8') as file:
+                file.writelines(lines)
+
+        else:
+            print(f"Format file '{file_extension}' tidak didukung.")
             return
 
-        found = False
-        for i, line in enumerate(lines):
-            if line.startswith(judul + ':'):
-                lines[i] = f"{judul}: {isi_baru}\n"
-                found = True
-                break
+        print(f"Catatan dengan judul '{judul}' berhasil diedit.")
 
-        if not found:
-            print("Catatan dengan judul ini tidak ditemukan.")
-            return
-
-        with open(filename, 'w') as file:
-            file.writelines(lines)
-        print("Catatan berhasil diedit.")
-
-    else:
-        print("Format file tidak didukung. Gunakan .csv, .json, atau .txt.")
+    except FileNotFoundError:
+        print(f"File '{file_path}' tidak ditemukan.")
+    except PermissionError:
+        print(f"Tidak ada izin untuk mengakses file '{file_path}'.")
+    except ValueError as e:
+        print(f"Kesalahan format file: {e}")
+    except Exception as e:
+        print(f"Terjadi kesalahan: {e}")
