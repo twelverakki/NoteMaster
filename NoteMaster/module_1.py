@@ -1,18 +1,28 @@
-from typing import List, Dict  
+import json
 
-# Daftar untuk menyimpan catatan  
-catatan_list: List[Dict[str, str]] = []  
+def buat_catatan(judul, isi, tipe_data):
+    """
+    Membuat catatan dengan format yang sesuai berdasarkan tipe data yang dipilih.
 
-def tambah_catatan(judul: str, isi: str) -> None:  
-    """Fungsi untuk menambah catatan baru ke dalam daftar."""  
-    catatan = {"judul": judul, "isi": isi}  
-    catatan_list.append(catatan)  
-    print(f"Catatan berhasil ditambahkan: {judul}")  
+    Parameters:
+    - judul (str): Judul catatan
+    - isi (str): Isi catatan
+    - tipe_data (str): Tipe data untuk menyimpan catatan ('csv', 'json', 'txt')
 
-def lihat_catatan() -> None:  
-    """Fungsi untuk melihat semua catatan yang ada."""  
-    if not catatan_list:  
-        print("Tidak ada catatan yang tersedia.")  
-    else:  
-        for i, catatan in enumerate(catatan_list, 1):  
-            print(f"{i}. Judul: {catatan['judul']}\n   Isi: {catatan['isi']}\n")
+    Returns:
+    - dict/str: Template catatan yang siap untuk disimpan
+    """
+    catatan = {
+        "judul": judul,
+        "isi": isi
+    }
+
+    if tipe_data == 'json':
+        return json.dumps(catatan, indent=4)
+    elif tipe_data == 'csv':
+        output = f"judul,isi\n{judul},{isi}\n"
+        return output
+    elif tipe_data == 'txt':
+        return f"judul:isi\n{judul}:{isi}"
+    else:
+        raise ValueError("Tipe data tidak valid. Pilih antara 'csv', 'json', atau 'txt'.")
