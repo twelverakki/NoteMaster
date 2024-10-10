@@ -1,5 +1,5 @@
 from .module_1 import tambah_catatan, tambah_catatan_existing, view_notes
-from .module_2 import hapus_all, hapus_catatan
+from .module_2 import hapus_all, hapus_catatan, hapus_item_catatan
 from .module_3 import edit_catatan
 from .module_4 import tampilkan_catatan
 from .module_5 import cari_catatan, pencarian_catatan
@@ -12,6 +12,7 @@ __all__ = [
     'view_notes',
     'hapus_all',
     'hapus_catatan',
+    'hapus_item_catatan',
     'edit_catatan',
     'tampilkan_catatan',
     'cari_catatan',
