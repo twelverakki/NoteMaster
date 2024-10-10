@@ -151,28 +151,51 @@ Index catatan tidak valid.
 
 ### `module_2`
 
-#### `hapus_catatan(file_path: str, note_id: int) -> None`
-Fungsi ini digunakan untuk menghapus catatan dari file berdasarkan ID catatan.
+#### `hapus_item_catatan(file_path, identifier) -> None`
+Fungsi ini digunakan untuk menghapus item dari file JSON, CSV, atau TXT berdasarkan ID (untuk JSON),
+judul (untuk CSV dan TXT).
 
 **Parameter:**
-- `file_path`: Path lengkap dari file yang akan dihapus.
-- `note_id`: ID catatan yang ingin dihapus.
+- `file_path (str)`: Path lengkap dari file.
+- `identifier (str/int)`: ID untuk JSON atau judul untuk CSV dan TXT.
 
 **Raises:**
 - `FileNotFoundError`: Jika file tidak ditemukan pada path yang diberikan.
 - `PermissionError`: Jika tidak ada izin yang cukup untuk menghapus file.
-- `Exception`: Kesalahan umum lainnya saat mencoba menghapus file.
+- `Exception`: Kesalahan umum lainnya saat mencoba menghapus item dalam file.
 
 **Contoh Penggunaan:**
 ```python
-hapus_catatan('notes/catatan.json', 1)
+hapus_item_catatan('my_notes/catatan.json', 1)
+hapus_item_catatan('my_notes/catatan.csv', 'note1')
+hapus_item_catatan('my_notes/catatan.txt', 'note1')
 ```
 
 **Output:**
 ```
-File notes/catatan.json berhasil dihapus.
+Item dengan judul [identifier] berhasil dihapus dari [file_path].
 ```
 Jika file tidak ditemukan atau terjadi kesalahan lain, pesan kesalahan akan dicetak.
+
+#### `hapus_catatan(file_path) -> None`
+Menghapus file JSON, CSV, atau TXT secara keseluruhan.
+
+**Parameter**
+- `file_path (str)`: Path lengkap dari file yang akan dihapus.
+
+**Raises:**
+- `FileNotFoundError`: Jika file tidak ditemukan.
+- `PermissionError`: Jika tidak ada izin untuk menghapus file.
+
+**Contoh Penggunaan:**
+```python
+hapus_catatan('my_notes/catatan.json')
+```
+
+**Output:**
+```
+File [file_path] berhasil dihapus.
+```
 
 #### `hapus_all(directory_path: str) -> None`
 Fungsi ini digunakan untuk menghapus semua file dengan ekstensi .json, .csv, dan .txt dalam direktori yang diberikan.
