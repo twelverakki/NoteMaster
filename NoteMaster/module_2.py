@@ -3,96 +3,84 @@ import json
 import csv
 import os
 
-def hapus_catatan(file_path, note_id):
+def hapus_item_catatan(file_path, identifier):
     """
-    Menghapus file teks (.txt) yang disimpan di sistem file.
+    Menghapus item dari file JSON, CSV, atau TXT berdasarkan ID (untuk JSON),
+    judul (untuk CSV dan TXT).
 
     Args:
-        file_path (str): Path lengkap dari file .txt yang akan dihapus.
+        file_path (str): Path lengkap dari file.
+        identifier (str/int): ID untuk JSON atau judul untuk CSV dan TXT.
 
     Raises:
         FileNotFoundError: Jika file tidak ditemukan pada path yang diberikan.
         PermissionError: Jika tidak ada izin yang cukup untuk menghapus file.
-        Exception: Kesalahan umum lainnya saat mencoba menghapus file.
-
-    Example:
-        >>> hapus_catatan('my_notes/catatan.txt', 'catatan')
-        >>> hapus_catatan('my_notes/catatan.json', 1)
-        >>> hapus_catatan('my_notes/catatan.csv', 'note1')
-        File notes/catatan.txt berhasil dihapus.
-
-    Jika file ditemukan, fungsi ini akan menghapus file dan mencetak pesan berhasil.
-    Jika file tidak ditemukan atau terjadi kesalahan lain, pesan kesalahan akan dicetak.
+        Exception: Kesalahan umum lainnya saat mencoba menghapus item dalam file.
     """
-    # Deteksi ekstensi file
     file_extension = os.path.splitext(file_path)[1]
 
-    # Proses berdasarkan ekstensi file
     if file_extension == '.json':
-        # Proses file JSON
-        with open(file_path, 'r') as file:
+        with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        # Hapus catatan dengan note_id yang sesuai
-        data = [note for note in data if note.get('id') != note_id]
+        # Hapus catatan dengan id yang sesuai
+        updated_data = [note for note in data if note.get('id') != identifier]
 
-        # Simpan perubahan
-        with open(file_path, 'w') as file:
-            json.dump(data, file, indent=4)
+        with open(file_path, 'w', encoding='utf-8') as file:
+            json.dump(updated_data, file, indent=4)
+        print(f"Item dengan ID '{identifier}' berhasil dihapus dari {file_path}.")
 
     elif file_extension == '.csv':
-        # Proses file CSV
         updated_data = []
         with open(file_path, 'r', newline='', encoding='utf-8') as file:
             reader = csv.DictReader(file)
-            # Cari dan hapus catatan yang sesuai dengan judul
-            updated_data = [row for row in reader if row['judul'] != note_id]
+            # Hapus catatan dengan judul yang sesuai
+            updated_data = [row for row in reader if row['judul'] != identifier]
 
-        if len(updated_data) < sum(1 for _ in csv.DictReader(open(file_path, 'r', encoding='utf-8'))):
-            # Simpan perubahan jika ada baris yang dihapus
-            with open(file_path, 'w', newline='', encoding='utf-8') as file:
-                writer = csv.DictWriter(file, fieldnames=['id', 'judul', 'isi'])
-                writer.writeheader()
-                writer.writerows(updated_data)
-            print(f"Catatan dengan judul '{note_id}' berhasil dihapus.")
-        else:
-            print(f"Catatan dengan judul '{note_id}' tidak ditemukan.")
+        with open(file_path, 'w', newline='', encoding='utf-8') as file:
+            writer = csv.DictWriter(file, fieldnames=['id', 'judul', 'isi'])
+            writer.writeheader()
+            writer.writerows(updated_data)
+        print(f"Item dengan judul '{identifier}' berhasil dihapus dari {file_path}.")
 
     elif file_extension == '.txt':
-        try:
-            os.remove(file_path)  # Menghapus file dari sistem
-            print(f"File {file_path} berhasil dihapus.")
-        except FileNotFoundError:
-            print(f"File {file_path} tidak ditemukan.")
-        except PermissionError:
-            print(f"Tidak memiliki izin untuk menghapus file {file_path}.")
-        except Exception as e:
-            print(f"Gagal menghapus file {file_path}: {e}")
+        with open(file_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
 
+        # Edit catatan yang sesuai dengan judul
+        updated_lines = [line for line in lines if not line.startswith(identifier + ':')]
+
+        with open(file_path, 'w', encoding='utf-8') as file:
+            file.writelines(updated_lines)
+
+        print(f"Item dengan judul '{identifier}' berhasil dihapus dari {file_path}.")
     else:
-        print("Format file tidak didukung")
+        print(f"Format file '{file_extension}' tidak didukung untuk penghapusan item.")
+
+def hapus_catatan(file_path):
+    """
+    Menghapus file JSON, CSV, atau TXT secara keseluruhan.
+
+    Args:
+        file_path (str): Path lengkap dari file yang akan dihapus.
+
+    Raises:
+        FileNotFoundError: Jika file tidak ditemukan.
+        PermissionError: Jika tidak ada izin untuk menghapus file.
+    """
+    try:
+        os.remove(file_path)  # Menghapus file dari sistem
+        print(f"File {file_path} berhasil dihapus.")
+    except FileNotFoundError:
+        print(f"File {file_path} tidak ditemukan.")
+    except PermissionError:
+        print(f"Tidak memiliki izin untuk menghapus file {file_path}.")
+    except Exception as e:
+        print(f"Gagal menghapus file {file_path}: {e}")
 
 def hapus_all(directory_path):
     """
     Menghapus semua file dengan ekstensi .json, .csv, dan .txt dalam direktori yang diberikan.
-
-    Args:
-        directory_path (str): Path lengkap dari direktori tempat file disimpan.
-
-    Raises:
-        FileNotFoundError: Jika direktori tidak ditemukan atau tidak valid.
-        PermissionError: Jika tidak ada izin yang cukup untuk menghapus file.
-        Exception: Kesalahan umum lainnya saat mencoba menghapus file.
-
-    Example:
-        >>> hapus_all('data/')
-        File data/catatan1.json berhasil dihapus.
-        File data/catatan2.csv berhasil dihapus.
-        File data/catatan3.txt berhasil dihapus.
-
-    Fungsi ini mencari semua file dengan ekstensi .json, .csv, dan .txt dalam direktori yang diberikan,
-    kemudian menghapus file-file tersebut satu per satu. Jika ada kesalahan dalam penghapusan
-    file atau direktori tidak ditemukan, pesan kesalahan akan dicetak.
     """
     path = Path(directory_path)
 
@@ -110,4 +98,3 @@ def hapus_all(directory_path):
         print(f"Tidak memiliki izin untuk menghapus file dalam direktori {directory_path}.")
     except Exception as e:
         print(f"Gagal menghapus file dalam direktori {directory_path}: {e}")
-
