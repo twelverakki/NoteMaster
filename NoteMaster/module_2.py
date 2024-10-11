@@ -5,12 +5,11 @@ import os
 
 def hapus_item_catatan(file_path, identifier):
     """
-    Menghapus item dari file JSON, CSV, atau TXT berdasarkan ID (untuk JSON),
-    judul (untuk CSV dan TXT).
+    Menghapus item dari file JSON, CSV, atau TXT berdasarkan judul.
 
     Args:
         file_path (str): Path lengkap dari file.
-        identifier (str/int): ID untuk JSON atau judul untuk CSV dan TXT.
+        identifier (str): judul dari catatan yang ingin dihapus di dalam file.
 
     Raises:
         FileNotFoundError: Jika file tidak ditemukan pada path yang diberikan.
@@ -23,12 +22,13 @@ def hapus_item_catatan(file_path, identifier):
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        # Hapus catatan dengan id yang sesuai
-        updated_data = [note for note in data if note.get('id') != identifier]
+        # Hapus catatan dengan judul yang sesuai
+        updated_data = [note for note in data if note.get('judul') != identifier]
 
         with open(file_path, 'w', encoding='utf-8') as file:
             json.dump(updated_data, file, indent=4)
-        print(f"Item dengan ID '{identifier}' berhasil dihapus dari {file_path}.")
+        print(f"Item dengan judul '{identifier}' berhasil dihapus dari {file_path}.")
+
 
     elif file_extension == '.csv':
         updated_data = []
@@ -38,7 +38,7 @@ def hapus_item_catatan(file_path, identifier):
             updated_data = [row for row in reader if row['judul'] != identifier]
 
         with open(file_path, 'w', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=['id', 'judul', 'isi'])
+            writer = csv.DictWriter(file, fieldnames=['judul', 'isi'])
             writer.writeheader()
             writer.writerows(updated_data)
         print(f"Item dengan judul '{identifier}' berhasil dihapus dari {file_path}.")
