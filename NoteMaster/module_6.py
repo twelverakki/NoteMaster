@@ -27,6 +27,9 @@ def simpan_catatan_json(catatan_list: List[Dict[str, str]], file_path: str) -> N
     if not catatan_list:  
         print("Daftar catatan tidak boleh kosong.")  
         return  
+    if not file_path.endswith('.json'):  
+        print("Parameter file_path harus berakhiran '.json'.")  
+        return  
     try:  
         with open(file_path, 'w', encoding='utf-8') as file:  
             json.dump(catatan_list, file, ensure_ascii=False, indent=4)  
@@ -34,7 +37,7 @@ def simpan_catatan_json(catatan_list: List[Dict[str, str]], file_path: str) -> N
     except FileNotFoundError:  
         print(f"File tidak ditemukan: {file_path}")  
     except IOError as e:  
-        print(f"Kesalahan I/O saat menyimpan catatan: {e}")  
+        print(f"Kesalahan I/O saat menyimpan catatan: {e}") 
 
 def simpan_catatan_txt(catatan_list: List[Dict[str, str]], file_path: str) -> None:  
     """  
@@ -57,6 +60,9 @@ def simpan_catatan_txt(catatan_list: List[Dict[str, str]], file_path: str) -> No
     """  
     if not catatan_list:  
         print("Daftar catatan tidak boleh kosong.")  
+        return  
+    if not file_path.endswith('.txt'):  
+        print("Parameter file_path harus berakhiran '.txt'.")  
         return  
     try:  
         with open(file_path, 'w', encoding='utf-8') as file:  
@@ -90,16 +96,19 @@ def simpan_catatan_csv(catatan_list: List[Dict[str, str]], file_path: str) -> No
     if not catatan_list:  
         print("Daftar catatan tidak boleh kosong.")  
         return  
+    if not file_path.endswith('.csv'):  
+        print("Parameter file_path harus berakhiran '.csv'.")  
+        return  
     try:  
         with open(file_path, 'w', newline='', encoding='utf-8') as file:  
-            writer = csv.DictWriter(file, fieldnames=FIELDNAMES)  
+            writer = csv.DictWriter(file, fieldnames=['judul', 'isi'])  
             writer.writeheader()  
             writer.writerows(catatan_list)  
         print(f"Catatan berhasil disimpan ke {file_path}.")  
     except FileNotFoundError:  
         print(f"File tidak ditemukan: {file_path}")  
     except IOError as e:  
-        print(f"Kesalahan I/O saat menyimpan catatan: {e}")  
+        print(f"Kesalahan I/O saat menyimpan catatan: {e}")   
 
 def backup_catatan(file_path: str, backup_path: str) -> None:  
     """  
