@@ -1,24 +1,28 @@
-Catatan = []
+import json
 
-def tambah_catatan(note):
-    """Fungsi untuk menambah catatan baru ke dalam daftar"""
-    Catatan.append(note)
-    print(f"Catatan berhasil ditambahkan: {note}")
+def buat_catatan(judul, isi, tipe_data):
+    """
+    Membuat catatan dengan format yang sesuai berdasarkan tipe data yang dipilih.
 
-def view_notes():
-    """Fungsi untuk melihat semua catatan yang ada"""
-    if not Catatan:
-        print("Tidak ada catatan yang tersedia.")
+    Parameters:
+    - judul (str): Judul catatan
+    - isi (str): Isi catatan
+    - tipe_data (str): Tipe data untuk menyimpan catatan ('csv', 'json', 'txt')
+
+    Returns:
+    - dict/str: Template catatan yang siap untuk disimpan
+    """
+    catatan = {
+        "judul": judul,
+        "isi": isi
+    }
+
+    if tipe_data == 'json':
+        return json.dumps(catatan, indent=4)
+    elif tipe_data == 'csv':
+        output = f"judul,isi\n{judul},{isi}\n"
+        return output
+    elif tipe_data == 'txt':
+        return f"judul:isi\n{judul}:{isi}"
     else:
-        for i, note in enumerate(Catatan, 1):
-            print(f"{i}. {note}")
-
-def tambah_catatan_existing(index, note):
-    """Fungsi untuk menambahkan catatan baru ke catatan yang sudah ada (di akhir)"""
-    if index < 0 or index >= len(Catatan):
-        print("Index catatan tidak valid.")
-    else:
-        Catatan[index] += "\n" + note
-        print(f"Catatan berhasil ditambahkan ke catatan nomor {index + 1}: {note}")
-
-
+        raise ValueError("Tipe data tidak valid. Pilih antara 'csv', 'json', atau 'txt'.")
