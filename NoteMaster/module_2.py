@@ -9,11 +9,10 @@ def hapus_item_catatan(file_path, identifier):
 
     Args:
         file_path (str): Path lengkap dari file.
-        identifier (str): judul dari catatan yang ingin dihapus di dalam file.
+        identifier (str): Judul dari catatan yang ingin dihapus di dalam file.
 
     Raises:
         FileNotFoundError: Jika file tidak ditemukan pada path yang diberikan.
-        PermissionError: Jika tidak ada izin yang cukup untuk menghapus file.
         Exception: Kesalahan umum lainnya saat mencoba menghapus item dalam file.
     """
     file_extension = os.path.splitext(file_path)[1]
@@ -73,8 +72,6 @@ def hapus_catatan(file_path):
         print(f"File {file_path} berhasil dihapus.")
     except FileNotFoundError:
         print(f"File {file_path} tidak ditemukan.")
-    except PermissionError:
-        print(f"Tidak memiliki izin untuk menghapus file {file_path}.")
     except Exception as e:
         print(f"Gagal menghapus file {file_path}: {e}")
 
@@ -94,7 +91,5 @@ def hapus_all(directory_path):
 
     except FileNotFoundError:
         print(f"Direktori {directory_path} tidak ditemukan.")
-    except PermissionError:
-        print(f"Tidak memiliki izin untuk menghapus file dalam direktori {directory_path}.")
     except Exception as e:
         print(f"Gagal menghapus file dalam direktori {directory_path}: {e}")

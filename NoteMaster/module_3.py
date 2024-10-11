@@ -2,14 +2,14 @@ import os
 import json
 import csv
 
-def edit_catatan(judul, isi_baru, file_name, directory=None):
+def edit_catatan(judul, isi_baru, filename, directory=None):
     """
     Mengedit catatan dalam file CSV, JSON, atau TXT di dalam atau luar direktori yang ditentukan.
 
     Args:
         judul (str): Judul catatan (atau ID untuk JSON) yang ingin diedit.
         isi_baru (str): Isi baru yang akan menggantikan isi catatan.
-        file_name (str): Nama file yang berisi catatan.
+        filename (str): Nama file yang berisi catatan.
         directory (str or None): Nama direktori tempat file berada, atau None jika file ada di root.
 
     Returns:
@@ -17,9 +17,9 @@ def edit_catatan(judul, isi_baru, file_name, directory=None):
     """
     # Buat path lengkap jika directory disertakan
     if directory:
-        file_path = os.path.join(directory, file_name)
+        file_path = os.path.join(directory, filename)
     else:
-        file_path = file_name
+        file_path = filename
 
     # Periksa apakah file ada
     if not os.path.isfile(file_path):

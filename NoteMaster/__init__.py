@@ -1,4 +1,4 @@
-from .module_1 import ubah_catatan, 
+from .module_1 import buat_catatan
 from .module_2 import hapus_all, hapus_catatan, hapus_item_catatan
 from .module_3 import edit_catatan
 from .module_4 import tampilkan_catatan
@@ -7,7 +7,7 @@ from .module_6 import simpan_catatan_json, simpan_catatan_txt, simpan_catatan_cs
 
 
 __all__ = [
-    'ubah_catatan', 
+    'buat_catatan',
     'hapus_all',
     'hapus_catatan',
     'hapus_item_catatan',

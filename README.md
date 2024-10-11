@@ -15,7 +15,8 @@ NoteMaster adalah paket Python yang menyediakan serangkaian alat untuk membantu 
   - Mencari catatan yang mengandung kata kunci tertentu
   - Menampilkan hasil pencarian
 - **Penghapusan Catatan**:
-  - Menghapus catatan tertentu berdasarkan ID
+  - Menghapus catatan tertentu berdasarkan judul
+  - Menghapus file catatan secara keseluruhan berdasarkan nama file
   - Menghapus semua catatan dalam direktori
 - **Penyimpanan Catatan**:
   - Menyimpan catatan ke dalam format JSON, CSV, atau TXT
@@ -33,45 +34,52 @@ pip install NoteMaster
 
 Berikut adalah beberapa contoh cara menggunakan paket NoteMaster:
 
-### Menambah Catatan
+### Membuat Catatan
 
 ```python
-from NoteMaster.module_1 import tambah_catatan
-tambah_catatan("Ini adalah catatan baru.")
+from NoteMaster import buat_catatan
+
+buat_catatan("Ini adalah catatan baru.")
 ```
 
 ### Mengedit Catatan
 
 ```python
-from NoteMaster.module_3 import edit_catatan
+from NoteMaster import edit_catatan
+
 edit_catatan("Judul Catatan", "Ini adalah konten yang diperbarui.", "catatan.txt")
 ```
 
 ### Mencari Catatan
 
 ```python
-from NoteMaster.module_5 import pencarian_catatan
+from NoteMaster import pencarian_catatan
+
 pencarian_catatan(catatan_list, "kata kunci")
 ```
 
 ### Menghapus Catatan
 
 ```python
-from NoteMaster.module_2 import hapus_catatan
-hapus_catatan("catatan.json", 1)
+from NoteMaster import hapus_item_catatan, hapus_catatan, hapus_all
+
+hapus_item_catatan("my_notes/catatan.json", "note1")
+hapus_catatan("my_notes/catatan.json", "note1")
+hapus_all("my_notes/")
 ```
 
 ### Menampilkan Catatan
 
 ```python
-from NoteMaster.module_4 import tampilkan_catatan
-tampilkan_catatan("NoteMaster")
+from NoteMaster import tampilkan_catatan
+
+tampilkan_catatan("my_notes")
 ```
 
 ### Menyimpan Catatan
 
 ```python
-from NoteMaster.module_6 import (
+from NoteMaster import (
     simpan_catatan_json,
     simpan_catatan_txt,
     simpan_catatan_csv,
@@ -138,21 +146,19 @@ ValueError: Tipe data tidak valid. Pilih antara 'csv', 'json', atau 'txt'.
 ### `module_2`
 
 #### `hapus_item_catatan(file_path, identifier) -> None`
-Fungsi ini digunakan untuk menghapus item dari file JSON, CSV, atau TXT berdasarkan ID (untuk JSON),
-judul (untuk CSV dan TXT).
+Fungsi ini digunakan untuk menghapus item dari file JSON, CSV, atau TXT berdasarkan judul.
 
 **Parameter:**
 - `file_path (str)`: Path lengkap dari file.
-- `identifier (str/int)`: ID untuk JSON atau judul untuk CSV dan TXT.
+- `identifier (str)`: Judul dari catatan yang ingin dihapus di dalam file.
 
 **Raises:**
 - `FileNotFoundError`: Jika file tidak ditemukan pada path yang diberikan.
-- `PermissionError`: Jika tidak ada izin yang cukup untuk menghapus file.
 - `Exception`: Kesalahan umum lainnya saat mencoba menghapus item dalam file.
 
 **Contoh Penggunaan:**
 ```python
-hapus_item_catatan('my_notes/catatan.json', 1)
+hapus_item_catatan('my_notes/catatan.json', 'note1')
 hapus_item_catatan('my_notes/catatan.csv', 'note1')
 hapus_item_catatan('my_notes/catatan.txt', 'note1')
 ```
@@ -171,7 +177,6 @@ Menghapus file JSON, CSV, atau TXT secara keseluruhan.
 
 **Raises:**
 - `FileNotFoundError`: Jika file tidak ditemukan.
-- `PermissionError`: Jika tidak ada izin untuk menghapus file.
 
 **Contoh Penggunaan:**
 ```python
@@ -191,7 +196,6 @@ Fungsi ini digunakan untuk menghapus semua file dengan ekstensi .json, .csv, dan
 
 **Raises:**
 - `FileNotFoundError`: Jika direktori tidak ditemukan atau tidak valid.
-- `PermissionError`: Jika tidak ada izin yang cukup untuk menghapus file.
 - `Exception`: Kesalahan umum lainnya saat mencoba menghapus file.
 
 **Contoh Penggunaan:**
@@ -217,9 +221,10 @@ Jika ada kesalahan dalam penghapusan file atau direktori tidak ditemukan, pesan 
 Fungsi ini digunakan untuk mengedit catatan dalam file yang ditentukan.
 
 **Parameter:**
-- `judul`: Judul catatan yang ingin diedit.
-- `isi_baru`: Isi baru yang akan menggantikan isi catatan.
-- `filename`: Nama file yang berisi catatan. Harus memiliki ekstensi .csv, .json, atau .txt.
+- `judul (str)`: Judul catatan yang ingin diedit.
+- `isi_baru (str)`: Isi baru yang akan menggantikan isi catatan.
+- `filename (str)`: Nama file yang berisi catatan. Harus memiliki ekstensi .csv, .json, atau .txt.
+- `directory (str or None)`: Nama direktori tempat file berada, atau None jika file ada di root.
 
 **Raises:**
 - `FileNotFoundError`: Jika file tidak ditemukan.
