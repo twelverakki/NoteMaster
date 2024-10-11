@@ -113,24 +113,12 @@ print(catatan_json)
 ```
 
 **Output:**
-Jika `tipe_data` adalah `'json'`, outputnya adalah:
-```json
+Outputnya adalah data dengan type dict yang telah diformat dan mempunyai key "judul" juga "isi":
+```
 {
     "judul": "Catatan Pertama",
     "isi": "Ini adalah isi dari catatan pertama."
 }
-```
-
-Jika `tipe_data` adalah `'csv'`, outputnya adalah:
-```
-judul,isi
-Catatan Pertama,Ini adalah isi dari catatan pertama.
-```
-
-Jika `tipe_data` adalah `'txt'`, outputnya adalah:
-```
-judul:isi
-Catatan Pertama:Ini adalah isi dari catatan pertama.
 ```
 
 Jika `tipe_data` tidak valid, outputnya adalah:
@@ -217,7 +205,7 @@ Jika ada kesalahan dalam penghapusan file atau direktori tidak ditemukan, pesan 
 
 ### `module_3`
 
-#### `edit_catatan(judul: str, isi_baru: str, filename: str) -> None`
+#### `edit_catatan(judul: str, isi_baru: str, filename: str, directory: str or none) -> None`
 Fungsi ini digunakan untuk mengedit catatan dalam file yang ditentukan.
 
 **Parameter:**
@@ -232,7 +220,7 @@ Fungsi ini digunakan untuk mengedit catatan dalam file yang ditentukan.
 
 **Contoh Penggunaan:**
 ```python
-edit_catatan("Catatan Pertama", "Ini adalah isi baru untuk catatan pertama.", "catatan.json")
+edit_catatan("Catatan Pertama", "Ini adalah isi baru untuk catatan pertama.", "catatan.json", "my_notes")
 ```
 
 **Output:**
