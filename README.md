@@ -300,37 +300,12 @@ Tidak ada file yang cocok dengan nama '[nama_file]'.
 
 ### `module_5`
 
-#### `cari_catatan(catatan_list: list, kata_kunci: str) -> list`
-Fungsi ini digunakan untuk mencari catatan yang sesuai dengan kata kunci.
+
+#### `cari_catatan(directory: str, kata_kunci: str) -> None`
+Fungsi ini digunakan untuk melakukan pencarian catatan berdasarkan kata kunci dari semua file di direktori.
 
 **Parameter:**
-- `catatan_list`: Daftar catatan, di mana setiap catatan adalah dictionary yang memiliki setidaknya kunci 'judul' dan 'isi'.
-- `kata_kunci`: Kata kunci yang akan dicari di dalam judul dan isi catatan.
-
-**Returns:**
-- Daftar catatan yang mengandung kata kunci di judul atau isi.
-
-**Contoh Penggunaan:**
-```python
-catatan_list = [
-    {'judul': 'Catatan Pertama', 'isi': 'Ini adalah isi catatan pertama.'},
-    {'judul': 'Catatan Kedua', 'isi': 'Ini adalah isi catatan kedua.'}
-]
-
-hasil = cari_catatan(catatan_list, 'pertama')
-print(hasil)
-```
-
-**Output:**
-```
-[{'judul': 'Catatan Pertama', 'isi': 'Ini adalah isi catatan pertama.'}]
-```
-
-#### `pencarian_catatan(catatan_list: list, kata_kunci: str) -> None`
-Fungsi ini digunakan untuk melakukan pencarian catatan berdasarkan kata kunci dan menampilkan hasilnya.
-
-**Parameter:**
-- `catatan_list`: Daftar catatan yang akan dicari, masing-masing catatan adalah dictionary dengan setidaknya kunci 'judul' dan 'isi'.
+- `directory`: Path direktori tempat catatan berada (misalnya, 'my_notes').
 - `kata_kunci`: Kata kunci yang akan dicari dalam judul dan isi catatan.
 
 **Returns:**
@@ -338,7 +313,7 @@ Fungsi ini digunakan untuk melakukan pencarian catatan berdasarkan kata kunci da
 
 **Contoh Penggunaan:**
 ```python
-pencarian_catatan(catatan_list, 'kedua')
+cari_catatan('my_notes', 'kedua')
 ```
 
 **Output:**
@@ -352,9 +327,10 @@ Jika tidak ada catatan yang ditemukan, outputnya adalah:
 Tidak ada catatan yang ditemukan dengan kata kunci 'kedua'.
 ```
 
-### Catatan modul 5
+### Catatan Modul
 - Pastikan kata kunci tidak kosong atau hanya berisi spasi sebelum melakukan pencarian.
 - Fungsi ini tidak mengembalikan nilai, tetapi mencetak hasil pencarian ke konsol.
+
 
 ### `module_6`
 #### `simpan_catatan_json(catatan_list: List[Dict[str, str]], file_path: str) -> None`

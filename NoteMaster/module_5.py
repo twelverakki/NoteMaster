@@ -1,52 +1,76 @@
-def cari_catatan(catatan_list, kata_kunci):
+import os
+import json
+import csv
+
+def baca_catatan(file_path):
     """
-    Fungsi untuk mencari catatan yang sesuai dengan kata kunci.
+    Membaca catatan dari file JSON, CSV, atau TXT dan mengembalikan daftar catatan.
 
     Args:
-        catatan_list (list): Daftar catatan, di mana setiap catatan adalah dictionary
-        yang memiliki setidaknya kunci 'judul' dan 'isi'.
-        kata_kunci (str): Kata kunci yang akan dicari di dalam judul dan isi catatan.
+        file_path (str): Path file yang akan dibaca.
 
     Returns:
-        list: Daftar catatan yang mengandung kata kunci di judul atau isi.
+        list: Daftar catatan dalam bentuk dictionary dengan kunci 'judul' dan 'isi'.
     """
-    hasil_pencarian = []
-    kata_kunci = kata_kunci.lower().strip()  # Menghapus spasi di awal dan akhir kata kunci
+    _, file_extension = os.path.splitext(file_path)
+    catatan_list = []
 
-    for catatan in catatan_list:
-        judul = catatan.get('judul', '').lower()
-        isi = catatan.get('isi', '').lower()
+    if file_extension == '.json':
+        with open(file_path, 'r', encoding='utf-8') as file:
+            catatan_list = json.load(file)
 
-        # Periksa apakah kata kunci ada di dalam judul atau isi
-        if kata_kunci in judul or kata_kunci in isi:
-            hasil_pencarian.append(catatan)
+    elif file_extension == '.csv':
+        with open(file_path, 'r', encoding='utf-8') as file:
+            reader = csv.DictReader(file)
+            catatan_list = [row for row in reader]
 
-    return hasil_pencarian
+    elif file_extension == '.txt':
+        with open(file_path, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+            for line in lines:
+                if ':' in line:
+                    judul, isi = line.strip().split(':', 1)
+                    catatan_list.append({'judul': judul.strip(), 'isi': isi.strip()})
+                else:
+                    print(f"Baris tidak sesuai format di {file_path}: '{line.strip()}'")
+
+    return catatan_list
 
 
-def pencarian_catatan(catatan_list, kata_kunci):
+def cari_catatan(directory, kata_kunci):
     """
-    Fungsi untuk melakukan pencarian catatan berdasarkan kata kunci dan menampilkan hasilnya.
+    Fungsi untuk melakukan pencarian catatan berdasarkan kata kunci dari semua file di direktori.
 
     Args:
-        catatan_list (list): Daftar catatan yang akan dicari, masing-masing catatan adalah dictionary
-        dengan setidaknya kunci 'judul' dan 'isi'.
+        directory (str): Path direktori tempat catatan berada (my_notes).
         kata_kunci (str): Kata kunci yang akan dicari dalam judul dan isi catatan.
 
     Returns:
-        None: Hasil pencarian akan ditampilkan langsung di terminal/console.
+        None: Menampilkan hasil pencarian langsung di terminal.
     """
-    kata_kunci = kata_kunci.strip()  # Menghapus spasi di awal dan akhir
+    kata_kunci = kata_kunci.strip().lower() 
 
-    if kata_kunci:  # Pastikan kata kunci tidak kosong setelah di-strip
-        hasil = cari_catatan(catatan_list, kata_kunci)
-
-        if hasil:
-            print(f"\nHasil pencarian untuk kata kunci '{kata_kunci}':")
-            for catatan in hasil:
-                print(f"- {catatan['judul']}: {catatan['isi']}")
-                print("-" * 40)  # Garis pemisah antar catatan
-        else:
-            print(f"\nTidak ada catatan yang ditemukan dengan kata kunci '{kata_kunci}'.")
-    else:
+    if not kata_kunci:
         print("Kata kunci tidak boleh kosong atau hanya berisi spasi.")
+        return
+
+    semua_catatan = []
+
+    for file_name in os.listdir(directory):
+        file_path = os.path.join(directory, file_name)
+        if os.path.isfile(file_path) and file_name.endswith(('.json', '.csv', '.txt')):
+            catatan_list = baca_catatan(file_path)
+            semua_catatan.extend(catatan_list)
+
+    hasil_pencarian = [
+        catatan for catatan in semua_catatan
+        if kata_kunci in catatan.get('judul', '').lower() or kata_kunci in catatan.get('isi', '').lower()
+    ]
+
+    if hasil_pencarian:
+        print(f"\nHasil pencarian untuk kata kunci '{kata_kunci}':")
+        for catatan in hasil_pencarian:
+            print(f"- {catatan['judul']}: {catatan['isi']}")
+            print("-" * 40)
+    else:
+        print(f"\nTidak ada catatan yang ditemukan dengan kata kunci '{kata_kunci}'.")
