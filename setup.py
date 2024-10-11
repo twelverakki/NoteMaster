@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='NoteMaster',
-    version='0.1.3',
+    version='0.1.4',
     description='Paket untuk mengelola catatan dengan metode CRUD',
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
