@@ -21,7 +21,6 @@ def hapus_item_catatan(file_path, identifier):
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        # Hapus catatan dengan judul yang sesuai
         updated_data = [note for note in data if note.get('judul') != identifier]
 
         with open(file_path, 'w', encoding='utf-8') as file:
@@ -33,7 +32,6 @@ def hapus_item_catatan(file_path, identifier):
         updated_data = []
         with open(file_path, 'r', newline='', encoding='utf-8') as file:
             reader = csv.DictReader(file)
-            # Hapus catatan dengan judul yang sesuai
             updated_data = [row for row in reader if row['judul'] != identifier]
 
         with open(file_path, 'w', newline='', encoding='utf-8') as file:
@@ -46,7 +44,6 @@ def hapus_item_catatan(file_path, identifier):
         with open(file_path, 'r', encoding='utf-8') as file:
             lines = file.readlines()
 
-        # Edit catatan yang sesuai dengan judul
         updated_lines = [line for line in lines if not line.startswith(identifier + ':')]
 
         with open(file_path, 'w', encoding='utf-8') as file:
@@ -68,7 +65,7 @@ def hapus_catatan(file_path):
         PermissionError: Jika tidak ada izin untuk menghapus file.
     """
     try:
-        os.remove(file_path)  # Menghapus file dari sistem
+        os.remove(file_path)
         print(f"File {file_path} berhasil dihapus.")
     except FileNotFoundError:
         print(f"File {file_path} tidak ditemukan.")
@@ -82,11 +79,9 @@ def hapus_all(directory_path):
     path = Path(directory_path)
 
     try:
-        # Dapatkan semua file dengan ekstensi yang ditentukan
         file_extensions = ['*.json', '*.csv', '*.txt']
         for ext in file_extensions:
             for file in path.glob(ext):
-                file.unlink()  # Menghapus file
                 print(f"File {file} berhasil dihapus.")
 
     except FileNotFoundError:
