@@ -21,7 +21,7 @@ def hapus_item_catatan(file_path, identifier):
         with open(file_path, 'r', encoding='utf-8') as file:
             data = json.load(file)
 
-        updated_data = [note for note in data if note.get('judul') != identifier]
+        updated_data = [note for note in data if note.get('Judul') != identifier]
 
         with open(file_path, 'w', encoding='utf-8') as file:
             json.dump(updated_data, file, indent=4)
@@ -32,10 +32,10 @@ def hapus_item_catatan(file_path, identifier):
         updated_data = []
         with open(file_path, 'r', newline='', encoding='utf-8') as file:
             reader = csv.DictReader(file)
-            updated_data = [row for row in reader if row['judul'] != identifier]
+            updated_data = [row for row in reader if row['Judul'] != identifier]
 
         with open(file_path, 'w', newline='', encoding='utf-8') as file:
-            writer = csv.DictWriter(file, fieldnames=['judul', 'isi'])
+            writer = csv.DictWriter(file, fieldnames=['Judul', 'Isi'])
             writer.writeheader()
             writer.writerows(updated_data)
         print(f"Item dengan judul '{identifier}' berhasil dihapus dari {file_path}.")
@@ -82,7 +82,7 @@ def hapus_all(directory_path):
         file_extensions = ['*.json', '*.csv', '*.txt']
         for ext in file_extensions:
             for file in path.glob(ext):
-                print(f"File {file} berhasil dihapus.")
+                print(f"File {file} berhasil dihapus.") if file.unlink() else ''
 
     except FileNotFoundError:
         print(f"Direktori {directory_path} tidak ditemukan.")

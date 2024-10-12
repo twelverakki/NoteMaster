@@ -11,8 +11,8 @@ def buat_catatan(judul, isi, tipe_data):
     - dict: Template catatan yang siap untuk disimpan
     """
     catatan = {
-        "judul": judul,
-        "isi": isi
+        "Judul": judul,
+        "Isi": isi
     }
 
     if tipe_data == 'json' or tipe_data == 'csv' or tipe_data == 'txt':

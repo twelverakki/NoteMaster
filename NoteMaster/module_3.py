@@ -57,8 +57,8 @@ def edit_catatan(judul, isi_baru, filename, directory=None):
 
             found = False
             for item in data:
-                if item['judul'] == judul:
-                    item['isi'] = isi_baru
+                if item['Judul'] == judul:
+                    item['Isi'] = isi_baru
                     found = True
                     break
 
